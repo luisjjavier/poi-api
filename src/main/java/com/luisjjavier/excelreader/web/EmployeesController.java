@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /**
  *
@@ -68,4 +69,15 @@ public class EmployeesController {
         return ResponseEntity.notFound().build();
     }
 
+    @RequestMapping(method = PUT, value = "/{id}",consumes = "application/json")
+    @CrossOrigin
+    public ResponseEntity<Employee>put(@PathVariable int id, @RequestBody EmployeeDto input) {
+        Employee employee = employeeRepository.getEmployee(id);
+        employee.setSalary(input.getSalary());
+        employee.setName(input.getName());
+        employee.setLastname(input.getLastname());
+        employee.setDepartment(input.getDepartment());
+        this.employeeRepository.saveChanges();
+        return ResponseEntity.ok(employee);
+    }
 }
